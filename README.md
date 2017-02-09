@@ -43,3 +43,21 @@ Get as far as you can in http://snapsvg.io/start/
 ## Friday
 JavaScript + data vis
 Problem Solving
+
+# week 11
+## Monday
+JavaScript +  Data vis
+Rounding off
+Supervision available
+
+## Tuesday
+NOT MINE
+
+## Wednesday
+Project time
+
+## Thursday
+Supervision available
+
+## Friday
+Presentation
