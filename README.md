@@ -3,9 +3,16 @@
 
 # Week 9
 ## Monday
-Advanced SQL
-Joins
-json_encode
+### Advanced SQL, joins
+Good morning ER
+INNER JOIN
+### Advanced SQL, aggregate functions
+GROUP BY
+* COUNT
+* SUM
+* Show the rest
+
+### json_encode
 
 ## Tuesday
 JavaScript
