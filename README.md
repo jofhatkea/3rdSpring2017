@@ -14,9 +14,14 @@ GROUP BY
 
 ### json_encode
 
+### Exercises
+Have a .php document that oupys json from json_encode
+
 ## Tuesday
-JavaScript
-\<Template\>
+### JavaScript
+#### fetch
+#### polyfills
+#### \<Template\>
 
 ## Wednesday
 Exercises: TODO
