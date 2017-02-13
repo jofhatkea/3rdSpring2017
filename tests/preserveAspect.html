@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        svg {
+            fill:#fff;
+        }
+        svg circle {
+            fill:cyan;
+            stroke: #000;
+        }
+        svg circle:nth-child(2) {
+            fill:magenta;
+        }
+        svg circle:nth-child(3) {
+            fill:yellow;
+        }
+        svg circle:nth-child(4) {
+            fill:#FFF;
+        }
+        header {
+            background:#FFF;
+            padding: 1em;
+            width: 100vw;
+        }
+
+        article {
+            display: flex; /* 1 */
+            flex-wrap: wrap; /* 2 */
+            margin: -0.5em; /* 5 (edit me!) */
+
+        }
+
+        article > * {
+            padding: 0.5em;
+            margin: 0.5em; /* 4 (edit me!) */
+        }
+        article > * span {
+            float:right;
+            cursor:pointer;
+        }
+        .hidden {
+            visibility:hidden;
+        }
+        select {display:inline}
+    </style>
+</head>
+<body>
+<header class="z-depth-4">
+    <form >
+        <div class="row">
+            <div class="input-field inline col s6 m4 l2">
+                <input id="width" type="number" name="width" value="200">
+                <label for="width">Width</label>
+            </div>
+            <div class="input-field inline col s6 m4 l2">
+                <input id="height" type="number" name="height" value="200">
+                <label for="height">Width</label>
+            </div>
+            <div class="input-field inline col s12 m4 l2">
+                <input id="viewBox" type="text" required pattern="([0-9]+ ){3}([0-9]+)" name="viewBox" value="0 0 100 100" title="Please specify the pattern as : 'minX minY width height'">
+                <label for="viewBox">viewBox</label>
+            </div>
+            <div class="paContainer hidden col s6 l3">
+                <label for="preserveAspectRatio">preserveAspectRatio</label>
+                <select id="preserveAspectRatio" name="preserveAspectRatio" class="browser-default">
+                    <option value="">Do not set</option>
+                    <option>none</option>
+                    <option>xMinYMin</option>
+                    <option>xMidYMin</option>
+                    <option>xMaxYMin</option>
+                    <option>xMinYMid</option>
+                    <option value="xMidYMid">xMidYMid (default)</option>
+                    <option>xMaxYMid</option>
+                    <option>xMinYMax</option>
+                    <option>xMidYMax</option>
+                    <option>xMaxYMax</option>
+                </select>
+
+            </div>
+
+            <div class="col hidden s6 l3">
+                <label for="meetOrSlice">meetOrSlice</label>
+                <select id="meetOrSlice" name="meetOrSlice" class="browser-default">
+                    <option value="">Do not set</option>
+                    <option>meet</option>
+                    <option>slice</option>
+                </select>
+
+            </div>
+        </div>
+        <button class="btn waves-effect waves-light col l2" type="submit" name="action">Create SVG
+            <i class="material-icons right">send</i>
+        </button>
+
+    </form>
+</header>
+<article>
+<template id="mysvg">
+    <section class="hoverable">
+        <span>x</span>
+        <pre></pre>
+        <svg class="z-depth-2">
+            <circle cx="10" cy="10" r="10"/>
+            <circle cx="90" cy="10" r="10" />
+            <circle cx="10" cy="90" r="10" />
+            <circle cx="90" cy="90" r="10" />
+        </svg>
+    </section>
+</template>
+</article>
+<script>
+
+
+
+
+    let width=document.querySelector('input[name="width"]');
+    let height=document.querySelector('input[name="height"]');
+    let viewBox=document.querySelector('input[name="viewBox"]');
+    let preserveAspectRatio=document.querySelector('select[name="preserveAspectRatio"]');
+    let meetOrSlice=document.querySelector('select[name="meetOrSlice"]');
+    let paContainer = document.querySelector('.paContainer');
+    width.addEventListener('keyup', e=>{
+       allowPreserveSettings(e);
+    });
+    height.addEventListener('keyup', e=>{
+        allowPreserveSettings(e);
+    });
+    width.addEventListener('change', e=>{
+        allowPreserveSettings(e);
+    });
+    height.addEventListener('change', e=>{
+        allowPreserveSettings(e);
+    });
+    viewBox.addEventListener('keyup', e=>{
+        allowPreserveSettings(e);
+    });
+    preserveAspectRatio.addEventListener('change', e=>{
+        console.log(e)
+        if(e.target.value!='' && e.target.value!='none'){
+            meetOrSlice.parentNode.classList.remove('hidden');
+        } else {
+            meetOrSlice.parentNode.classList.add('hidden');
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit',(e)=>{
+        clone();
+        console.log("submitted");
+        e.preventDefault();
+    });
+    function allowPreserveSettings(e){
+        let parts = viewBox.value.split(' ');
+        let aspect1 = width.value/height.value;
+        let aspect2 = parts[2]/parts[3]
+        if(aspect1 != aspect2){
+            paContainer.classList.remove('hidden');
+        } else {
+            paContainer.classList.add('hidden');
+        }
+    }
+    function clone(){
+        const template = document.querySelector("#mysvg").content;
+        let clone = template.cloneNode(true);
+        let svg = clone.querySelector('svg');
+        let pre = clone.querySelector('pre');
+        let close = clone.querySelector('span').addEventListener('click', e=>{
+            document.querySelector('article').removeChild(e.target.parentNode)
+        })
+        let preText=[];
+        svg.setAttribute('width', document.querySelector('input[name="width"]').value);
+        preText.push("width: "+document.querySelector('input[name="width"]').value)
+
+        svg.setAttribute('height', document.querySelector('input[name="height"]').value);
+        preText.push("height: "+document.querySelector('input[name="height"]').value)
+
+        svg.setAttribute('viewBox', document.querySelector('input[name="viewBox"]').value);
+        preText.push("viewBox: "+document.querySelector('input[name="viewBox"]').value)
+
+        if(document.querySelector('select[name="preserveAspectRatio"]').value !== ''){
+            svg.setAttribute('preserveAspectRatio', document.querySelector('select[name="preserveAspectRatio"]').value);
+            preText.push("preserveAspectRatio (align): "+document.querySelector('select[name="preserveAspectRatio"]').value)
+        }
+        if(document.querySelector('select[name="meetOrSlice"]').value !== ''){
+            let t = svg.getAttribute('preserveAspectRatio');
+            svg.setAttribute('preserveAspectRatio', t+" "+document.querySelector('select[name="meetOrSlice"]').value);
+            preText.push("preserveAspectRatio (meetOrSlice): "+document.querySelector('select[name="meetOrSlice"]').value)
+        }
+        pre.textContent=preText.join("\n");
+        document.querySelector('article').appendChild(clone);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="">
+    <style>
+        svg {
+            background:red;
+        }
+    </style>
+</head>
+<body>
+
+<svg id="svg">
+
+</svg>
+
+<script>
+    function f(x, y) {
+        var svg = document.getElementById('svg');
+
+        var circle = document.createElementNS(svg.namespaceURI, 'circle');
+        circle.setAttribute('cx', x);
+        circle.setAttribute('cy', y);
+        circle.setAttribute('r', '50');
+
+        var animation = document.createElementNS(svg.namespaceURI, 'animateMotion');
+        var path = 'm 0,0 l ' + (x + 500) + ',50'
+        animation.setAttribute('path', path);
+        animation.setAttribute('dur', '30s');
+        animation.setAttribute('fill', 'freeze');
+        circle.appendChild(animation);
+
+        svg.appendChild(circle);
+    }
+
+    f(50, 50);
+</script>
+</body>
+</html>
