@@ -10,7 +10,7 @@ INNER JOIN
 GROUP BY
 * COUNT
 * SUM
-* Show the rest
+* Show the rest briefly
 
 ### json_encode
 
