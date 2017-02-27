@@ -10,11 +10,15 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         svg {
-            fill:#fff;
+            background:yellow;
+        }
+        svg rect {
+            fill: magenta;
         }
         svg circle {
             fill:cyan;
             stroke: #000;
+            stroke-width:1;
         }
         svg circle:nth-child(2) {
             fill:magenta;
@@ -25,22 +29,22 @@
         svg circle:nth-child(4) {
             fill:#FFF;
         }
-        header {
+       /* header {
             background:#FFF;
             padding: 1em;
             width: 100vw;
         }
 
         article {
-            display: flex; /* 1 */
-            flex-wrap: wrap; /* 2 */
-            margin: -0.5em; /* 5 (edit me!) */
+            display: flex;
+            flex-wrap: wrap;
+            margin: -0.5em;
 
         }
 
         article > * {
             padding: 0.5em;
-            margin: 0.5em; /* 4 (edit me!) */
+            margin: 0.5em;
         }
         article > * span {
             float:right;
@@ -49,7 +53,7 @@
         .hidden {
             visibility:hidden;
         }
-        select {display:inline}
+        select {display:inline}*/
     </style>
 </head>
 <body>
@@ -72,7 +76,8 @@
             <div class="paContainer hidden col s6 l3">
                 <label for="preserveAspectRatio">preserveAspectRatio</label>
                 <select id="preserveAspectRatio" name="preserveAspectRatio" class="browser-default">
-                    <option value="">Do not set</option>
+                    <option value="" data-description="Do not force uniform scaling. Scale the graphic content of the given element non-uniformly if necessary such that the element's bounding box exactly matches the viewport rectangle.
+(Note: if <align> is none, then the optional <meetOrSlice> value is ignored.)">Do not set</option>
                     <option>none</option>
                     <option>xMinYMin</option>
                     <option>xMidYMin</option>
@@ -87,11 +92,11 @@
 
             </div>
 
-            <div class="col hidden s6 l3">
+            <div class="col hidden s6 l3 msContainer">
                 <label for="meetOrSlice">meetOrSlice</label>
                 <select id="meetOrSlice" name="meetOrSlice" class="browser-default">
                     <option value="">Do not set</option>
-                    <option>meet</option>
+                    <option value="meet">meet (default)</option>
                     <option>slice</option>
                 </select>
 
@@ -104,12 +109,15 @@
     </form>
 </header>
 <article>
+    <svg width="400" height="200" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+        <circle cx="50" cy="50" r="40"/>
+    </svg>
 <template id="mysvg">
     <section class="hoverable">
         <span>x</span>
         <pre></pre>
         <svg class="z-depth-2">
-            <circle cx="10" cy="10" r="10"/>
+            <circle cx="10" cy="10" r="9"/>
             <circle cx="90" cy="10" r="10" />
             <circle cx="10" cy="90" r="10" />
             <circle cx="90" cy="90" r="10" />
@@ -128,6 +136,9 @@
     let preserveAspectRatio=document.querySelector('select[name="preserveAspectRatio"]');
     let meetOrSlice=document.querySelector('select[name="meetOrSlice"]');
     let paContainer = document.querySelector('.paContainer');
+    let msContainer = document.querySelector('.msContainer');
+    let string='';
+
     width.addEventListener('keyup', e=>{
        allowPreserveSettings(e);
     });
@@ -144,11 +155,11 @@
         allowPreserveSettings(e);
     });
     preserveAspectRatio.addEventListener('change', e=>{
-        console.log(e)
+        //console.log(e.dataset.description)
         if(e.target.value!='' && e.target.value!='none'){
-            meetOrSlice.parentNode.classList.remove('hidden');
+            msContainer.classList.remove('hidden');
         } else {
-            meetOrSlice.parentNode.classList.add('hidden');
+            msContainer.classList.add('hidden');
         }
     });
 
@@ -165,6 +176,9 @@
             paContainer.classList.remove('hidden');
         } else {
             paContainer.classList.add('hidden');
+            msContainer.classList.add('hidden');
+            preserveAspectRatio.selectedIndex=0;
+            meetOrSlice.selectedIndex=0;
         }
     }
     function clone(){
@@ -176,23 +190,23 @@
             document.querySelector('article').removeChild(e.target.parentNode)
         })
         let preText=[];
-        svg.setAttribute('width', document.querySelector('input[name="width"]').value);
-        preText.push("width: "+document.querySelector('input[name="width"]').value)
+        svg.setAttribute('width', width.value);
+        preText.push("width: "+width.value)
 
-        svg.setAttribute('height', document.querySelector('input[name="height"]').value);
-        preText.push("height: "+document.querySelector('input[name="height"]').value)
+        svg.setAttribute('height', height.value);
+        preText.push("height: "+height.value)
 
-        svg.setAttribute('viewBox', document.querySelector('input[name="viewBox"]').value);
-        preText.push("viewBox: "+document.querySelector('input[name="viewBox"]').value)
+        svg.setAttribute('viewBox', viewBox.value);
+        preText.push("viewBox: "+viewBox.value)
 
-        if(document.querySelector('select[name="preserveAspectRatio"]').value !== ''){
-            svg.setAttribute('preserveAspectRatio', document.querySelector('select[name="preserveAspectRatio"]').value);
-            preText.push("preserveAspectRatio (align): "+document.querySelector('select[name="preserveAspectRatio"]').value)
+        if(preserveAspectRatio.value !== ''){
+            svg.setAttribute('preserveAspectRatio', preserveAspectRatio.value);
+            preText.push("preserveAspectRatio (align): "+preserveAspectRatio.value)
         }
-        if(document.querySelector('select[name="meetOrSlice"]').value !== ''){
+        if(meetOrSlice.value !== ''){
             let t = svg.getAttribute('preserveAspectRatio');
-            svg.setAttribute('preserveAspectRatio', t+" "+document.querySelector('select[name="meetOrSlice"]').value);
-            preText.push("preserveAspectRatio (meetOrSlice): "+document.querySelector('select[name="meetOrSlice"]').value)
+            svg.setAttribute('preserveAspectRatio', t+" "+meetOrSlice.value);
+            preText.push("preserveAspectRatio (meetOrSlice): "+meetOrSlice.value)
         }
         pre.textContent=preText.join("\n");
         document.querySelector('article').appendChild(clone);

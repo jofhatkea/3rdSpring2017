@@ -1,16 +1,29 @@
 # 3rdSpring2017
 ## a small repo for my 3rd semester notes
 
+### DataViz ideas
+* worldmap, where do the products come from
+    * color to indicate how much?
+    * data from db?
+* snap svg barchart
+    * plain rects
+        * left to right
+        * bottom towards top
+* "infographic story"
+    * like theme 2, when this happens, do that, repeat
+* animating stroke-dash stuff   
+ 
 # Week 9
 ## Monday
 ### Advanced SQL, joins
 Good morning ER
-INNER JOIN
+
+INNER JOIN's
 ### Advanced SQL, aggregate functions
 GROUP BY
 * COUNT
 * SUM
-* Show the rest
+* Only show the rest
 
 ### json_encode
 
@@ -27,11 +40,15 @@ It should be ready for tomorrow
 * polyfills
 * \<Template\>
 
-## Wednesday
-Exercises: 
-Create a website that uses fetch & \<template\> to out put data
+### Exercises: 
+Create a website that uses fetch & \<template\> to output data
 
 Use the database you've created in the previous week
+
+## Wednesday
+Read YDKJS chapter 1 & 2
+
+https://github.com/getify/You-Dont-Know-JS/blob/master/up%20&%20going/README.md#you-dont-know-js-up--going
 
 ## Thursday
 ### JavaScript
