@@ -23,7 +23,7 @@ INNER JOIN's
 GROUP BY
 * COUNT
 * SUM
-* Only show the rest
+* Show the rest briefly
 
 ### json_encode
 
